@@ -28,11 +28,11 @@ function get_github_src () {
 		exit 1;
 	fi
 	unzip -qq "${pkg}.zip" 2>&1 > /dev/null
-	if ! [ -d "${pkg}-master" ] ; then
-		echo "ERROR: missing dir $pkg-master in $tmpdir!"
+	if ! [ -d "${pkg}-${github_branch}" ] ; then
+		echo "ERROR: missing dir $pkg-${github_branch} in $tmpdir!"
 		exit 1;
 	fi
-	mv "${pkg}-master" "${pkg}"
+	mv "${pkg}-${github_branch}" "${pkg}"
 	cd - 2>&1 >/dev/null
 }
 
@@ -265,6 +265,7 @@ function get_dist () {
 pkg=$1
 target=$2
 ver=$3
+branch=$4
 
 if [ "${pkg}" = "" ] ; then
 	usage
@@ -293,7 +294,13 @@ prj_dir="/repository/projects/${pkg}"
 pkgsnapfile="${pkg}-SNAP-${date}"
 pkgrelfile="${pkg}-${ver}"
 
-github_zip="master.zip"
+if [ "x$branch" = "x" ] ;
+	github_branch="master"
+else
+	github_branch="$branch"
+fi
+
+github_zip="$github_branch.zip"
 github_base="https://github.com/openca"
 github_suffix="archive/$github_zip"
 github_url="${github_base}/${pkg}/${github_suffix}"

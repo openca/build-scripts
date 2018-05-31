@@ -24,11 +24,11 @@ function get_github_src () {
 		exit 1;
 	fi
 	unzip -qq "${pkgname}.zip"
-	if ! [ -d "${pkgname}-master" ] ; then
-		echo "ERROR: missing dir $pkgname-master in $tmpdir!"
+	if ! [ -d "${pkgname}-${github_branch}" ] ; then
+		echo "ERROR: missing dir $pkgname-$github_branch in $tmpdir!"
 		exit 1;
 	fi
-	mv "${pkgname}-master" "${pkgname}"
+	mv "${pkgname}-${github_branch}" "${pkgname}"
 	cd - 2>&1 >/dev/null
 }
 
@@ -193,6 +193,7 @@ function build_src_rel() {
 pkg=$1
 target=$2
 ver=$3
+brach=$4
 
 os=`uname -s`-`uname -r`
 arch=`uname -p`
@@ -218,7 +219,13 @@ pkgrelfile="${pkg}-${ver}.tar.gz"
 pkgrep="/var/spool/pkg"
 target=""
 
-github_zip="master.zip"
+if [ "x$branch" = "x" ] ; then
+	github_branch="master"
+else
+	github_branch="$branch"
+fi
+
+github_zip="github_branch.zip"
 github_base="https://github.com/openca"
 github_suffix="archive/$github_zip"
 github_url="${github_base}/${pkg}/${github_suffix}"
