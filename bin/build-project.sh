@@ -17,22 +17,22 @@ function usage {
 	echo
 }
 
-server="ftp.openca.org"
 os=`uname -s`
 prj="$1"
 rel="$2"
 ver="$3"
 opt="$4"
-branch="$5"
+prj_branch="$5"
 
 # if using github repos, please enable the following line
 suffix=-github
+tmpdir="/var/tmp"
 
-if [ -d "${HOME}/bin" ] ; then
-	tmpdir="${HOME}/bin"
-else
-	tmpdir="/var/tmp"
-fi
+# if [ -d "${HOME}/bin" ] ; then
+# 	tmpdir="${HOME}/bin"
+# else
+# 	tmpdir="/var/tmp"
+# fi
 
 if [ "$os" = "Linux" ] ; then
 	binlist="rpm bin"
@@ -84,6 +84,7 @@ case "$opt" in
 		list=$binlist;
 		;;
 	src)
+		[ "x$prj_branch" = "x" ] && prj_branch="$4"
 		prefix=build;
 		list="$opt";
 		;;
@@ -98,9 +99,15 @@ case "$opt" in
 		;;
 esac
 
+# server='ftp.openca.org'
+# scp $server:/repository/scripts/$filename "$tmpdir"
+
+branch="master"
+
 for i in $list ; do
 	filename="$prefix-$i${suffix}.sh"
-	scp $server:/repository/scripts/$filename "$tmpdir"
+	http_target="https://raw.githubusercontent.com/openca/build-scripts/$branch/bin/$filename"
+	wget -q -O "$tmpdir/$filename" "$http_target"
 	if [ -f "$tmpdir/$filename" ] ; then
 		chmod +x "$tmpdir/$filename"
 		"$tmpdir/$filename" "$prj" "$rel" "$ver" "$branch"
