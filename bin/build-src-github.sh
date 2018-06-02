@@ -116,7 +116,7 @@ function build_src_snap() {
 	cleanup "$tmpdir" "${inst_dest}"
 	create_tmp "$tmpdir"
 
-	echo "   * Retrieving source archive (master.zip) files ... "
+	echo "   * Retrieving source archive ($github_branch.zip) files ... "
 	get_github_src "${pkg}"
 
 	echo "   * Configuring and building archive file ... "
@@ -225,7 +225,7 @@ else
 	github_branch="$branch"
 fi
 
-github_zip="github_branch.zip"
+github_zip="$github_branch.zip"
 github_base="https://github.com/openca"
 github_suffix="archive/$github_zip"
 github_url="${github_base}/${pkg}/${github_suffix}"

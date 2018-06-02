@@ -24,7 +24,7 @@ function get_github_src () {
 	cd "${tmpdir}"
 	wget -q -O "${pkg}.zip" "${github_url}" 2>&1 >/dev/null
 	if [ $? -gt 0 ]  ; then
-		echo "ERROR: can not get $1 master.zip src file!"
+		echo "ERROR: can not get $1 $github_branch.zip src file!"
 		exit 1;
 	fi
 	unzip -qq "${pkg}.zip" 2>&1 > /dev/null

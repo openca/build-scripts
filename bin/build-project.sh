@@ -15,6 +15,9 @@ function usage {
 	echo "  <option> ..........: One of 'src' 'all' 'rpm' 'bin'"
 	echo "  <branch> ..........: Repository's Branch to use for the build"
 	echo
+	echo "  Set USE_LOCAL_SCRIPTS='yes' to use local (same dir) scripts"
+	echo "  instead of downloading them from the GIT repository."
+	echo
 }
 
 os=`uname -s`
@@ -104,10 +107,22 @@ esac
 
 branch="master"
 
+if [ "x$USE_LOCAL_SCRIPTS" = "xyes" ] ; then
+	BUILD_SCRIPTS_LOCAL=yes
+else
+	BUILD_SCRIPTS_LOCAL=no
+fi
+
+echo "LOCAL: $BUILD_SCRIPTS_LOCAL"
+
 for i in $list ; do
 	filename="$prefix-$i${suffix}.sh"
-	http_target="https://raw.githubusercontent.com/openca/build-scripts/$branch/bin/$filename"
-	wget -q -O "$tmpdir/$filename" "$http_target"
+	if [ "$BUILD_SCRIPTS_LOCAL" = "yes" ] ; then
+		cp "$filename" "$tmpdir/$filename"
+	else
+		http_target="https://raw.githubusercontent.com/openca/build-scripts/$branch/bin/$filename"
+		wget -q -O "$tmpdir/$filename" "$http_target"
+	fi
 	if [ -f "$tmpdir/$filename" ] ; then
 		chmod +x "$tmpdir/$filename"
 		"$tmpdir/$filename" "$prj" "$rel" "$ver" "$branch"
