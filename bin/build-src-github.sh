@@ -33,7 +33,7 @@ function get_github_src () {
 }
 
 function usage () {
-	echo "Usage: $0 <pkgname> <snap | rel <version> >"
+	echo "Usage: $0 <pkgname> <snap | rel <version> > [ branch ]"
 	exit 1;
 }
 
