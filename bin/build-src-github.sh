@@ -20,7 +20,7 @@ function get_github_src () {
 	cd "${tmpdir}"
 	wget -q -O "${pkgname}.zip" "${github_url}"
 	if [ $? -gt 0 ]  ; then
-		echo "ERROR: can not get $1 master.zip src file!"
+		echo "ERROR: can not get $1 $github_branch src file!"
 		exit 1;
 	fi
 	unzip -qq "${pkgname}.zip"
@@ -163,7 +163,7 @@ function build_src_rel() {
 	cleanup "$tmpdir" "${inst_dest}"
 	create_tmp "$tmpdir"
 
-	echo "   * Retrieving source archive (master.zip) files ... "
+	echo "   * Retrieving source archive ($github_branch.zip) files ... "
 	get_github_src "${pkg}"
 
 	echo "   * Configuring and building archive file ... "
@@ -193,7 +193,7 @@ function build_src_rel() {
 pkg=$1
 target=$2
 ver=$3
-brach=$4
+branch=$4
 
 os=`uname -s`-`uname -r`
 arch=`uname -p`
@@ -224,6 +224,8 @@ if [ "x$branch" = "x" ] ; then
 else
 	github_branch="$branch"
 fi
+
+echo "[ OPT: src, PKG: $pkg, REL: $ver, BRANCH: $github_branch ]"
 
 github_zip="$github_branch.zip"
 github_base="https://github.com/openca"

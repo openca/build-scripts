@@ -80,8 +80,6 @@ fi
 
 all="$binlist"
 
-echo "OPT: $opt"
-
 case "$opt" in
 	all)
 		list=$binlist;
@@ -105,7 +103,11 @@ esac
 # server='ftp.openca.org'
 # scp $server:/repository/scripts/$filename "$tmpdir"
 
-branch="master"
+if [ "x$prj_branch" = "x" ] ; then
+	branch="master"
+else
+	branch=$prj_branch
+fi
 
 if [ "x$USE_LOCAL_SCRIPTS" = "xyes" ] ; then
 	BUILD_SCRIPTS_LOCAL=yes
@@ -113,7 +115,7 @@ else
 	BUILD_SCRIPTS_LOCAL=no
 fi
 
-echo "LOCAL: $BUILD_SCRIPTS_LOCAL"
+echo "[ BUILD: $list, VER: $ver, BRANCH: $branch, LOCAL: $BUILD_SCRIPTS_LOCAL ]"
 
 for i in $list ; do
 	filename="$prefix-$i${suffix}.sh"
