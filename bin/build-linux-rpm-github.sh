@@ -285,7 +285,7 @@ prj_dir="/repository/projects/${pkg}"
 pkgsnapfile="${pkg}-SNAP-${date}"
 pkgrelfile="${pkg}-${ver}"
 
-if [ "x$branch" = "x" ] ;
+if [ "x$branch" = "x" ] ; then
 	github_branch="master"
 else
 	github_branch="$branch"
